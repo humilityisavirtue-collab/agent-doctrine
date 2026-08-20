@@ -94,20 +94,31 @@ These were not designed. Every one of them is scar tissue from a specific failur
 multi-agent system, and the cards keep the incident attached because the incident is what makes
 the law survive an argument.
 
-The system they govern is private. The scale, counted rather than estimated — `gate_*.py` files,
-and text-matched for the rest:
+The system they govern is private. The scale, counted rather than estimated — **with the predicate
+beside each number, so a re-run settles the claim instead of forking it:**
 
-| measured | count |
-|---|---|
-| verification gates | **136** |
-| …that name an explicit negative control | **27** |
-| …that carry mutation tests proving the gate can die | **24** |
-| role cards / laws in them / falsifier clauses | 12 / 36 / 45 |
-| private memory cards / those recording an explicit falsifier | 398 / 40 |
+| measured | count | predicate |
+|---|---|---|
+| verification gates | **136** | `ls cell/verify/gate_*.py` — **146 repo-wide**, 10 live outside that tree |
+| …naming a negative control | **27** | regex `neg(ative)?[ _-]?control`, case-insensitive |
+| …carrying a named mutant table | **24** | literal token `MUTANTS` |
+| …carrying **both** | **5** | both of the above |
+| role cards / laws / falsifier clauses | 12 / 36 / 45 | `^### ` and `falsifier` in `cell/doctrine/*.md` |
+| private memory cards / recording a falsifier | 398 / 40 | `*.md` count; `falsif` text match |
 
-**Read the second row again: most gates do not carry a negative control.** 27 of 136 is the
-honest fraction, the discipline is real and it is not universal, and the counts are text-matched
-so they are lower bounds rather than audits.
+**Read those middle rows again: most gates carry neither, and only 5 of 136 carry both.** That is
+the honest fraction. The discipline is real and it is nowhere near universal.
+
+Two warnings about the numbers themselves, which matter more than the numbers:
+
+**The scope is stated because an unstated one is unfalsifiable.** "136 gates" without naming the
+surface invites a reader to re-derive it repo-wide, get **146**, and conclude the front page is
+wrong. Same number, different population, no way to tell which was meant. Ship the command.
+
+**These are text matches, not audits.** A gate can implement a negative control perfectly without
+using the phrase, and an AST pass looking for a *code identifier* named `neg_control` finds
+**zero** of 136 — the discipline lives in prose and ad-hoc asserts, not in a named construct
+anyone could grep for reliably. Treat every count here as a lower bound on a loose proxy.
 
 That paragraph originally read "143 of them carrying negative controls" — a number larger than
 the population it claimed to be a subset of, produced by silently swapping two different

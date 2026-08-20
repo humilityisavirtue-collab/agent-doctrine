@@ -94,10 +94,29 @@ These were not designed. Every one of them is scar tissue from a specific failur
 multi-agent system, and the cards keep the incident attached because the incident is what makes
 the law survive an argument.
 
-The system they govern is private, but the numbers are real: **136 verification gates, 143 of
-them carrying negative controls, 31 with mutation tests that prove the gate can die, and 398
-memory cards that each record a falsifier.** The doctrine is the transferable part, so it is
-the part that is public.
+The system they govern is private. The scale, counted rather than estimated — `gate_*.py` files,
+and text-matched for the rest:
+
+| measured | count |
+|---|---|
+| verification gates | **136** |
+| …that name an explicit negative control | **27** |
+| …that carry mutation tests proving the gate can die | **24** |
+| role cards / laws in them / falsifier clauses | 12 / 36 / 45 |
+| private memory cards / those recording an explicit falsifier | 398 / 40 |
+
+**Read the second row again: most gates do not carry a negative control.** 27 of 136 is the
+honest fraction, the discipline is real and it is not universal, and the counts are text-matched
+so they are lower bounds rather than audits.
+
+That paragraph originally read "143 of them carrying negative controls" — a number larger than
+the population it claimed to be a subset of, produced by silently swapping two different
+populations, sitting on the front page of a repo about exactly that error. It survived being
+written, reviewed, and published. It was caught by re-running the count, which is the only thing
+that ever catches it. Law 11 and Law 13, demonstrated at our own expense; the original wording is
+in the git history.
+
+The doctrine is the transferable part, so it is the part that is public.
 
 The agents are named by suit — Spade forms claims, Club proves them, and the pair is a
 pipeline rather than a hierarchy. You do not need that structure for the laws to apply. Rename

@@ -116,9 +116,24 @@ surface invites a reader to re-derive it repo-wide, get **146**, and conclude th
 wrong. Same number, different population, no way to tell which was meant. Ship the command.
 
 **These are text matches, not audits.** A gate can implement a negative control perfectly without
-using the phrase, and an AST pass looking for a *code identifier* named `neg_control` finds
-**zero** of 136 — the discipline lives in prose and ad-hoc asserts, not in a named construct
-anyone could grep for reliably. Treat every count here as a lower bound on a loose proxy.
+using the phrase. Treat every count as a lower bound on a loose proxy.
+
+**And the shape of the discipline is worth more than the count.** An AST pass for a *code
+identifier* named `neg_control` finds **zero** of 136 — but a literal `NEGCONTROL` appears **25
+times across 8 gates**, in assertion labels:
+
+```python
+check("NEGCONTROL: healthy beating daemon is NOT restarted", ...)
+```
+
+So the honest statement is narrower than "it lives in prose": **there is a naming convention and
+no construct.** 8 gates spell it identically and are exactly countable; the other 19 of the 27 say
+it in English, differently each time. Nothing enforces either.
+
+That distinction decides the fix. Not "invent a `negative_control()` helper and get 136 gates to
+adopt it" — instead **promote the label 8 gates already use** into a helper that emits a
+machine-countable marker while its call sites still read `NEGCONTROL: <what must not happen>`.
+An adoption with 8 worked examples, not a greenfield.
 
 That paragraph originally read "143 of them carrying negative controls" — a number larger than
 the population it claimed to be a subset of, produced by silently swapping two different

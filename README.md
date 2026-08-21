@@ -146,12 +146,22 @@ if p.name.startswith("test_"):
     nc = _check_negcontrol(text, p)
 ```
 
-**Scoped to `test_*`. It has never once run on a gate.** 78 of the 136 would trip it today.
+**Scoped to `test_*`. It has never once run on a gate.** Run over the real code path — not the
+regex, the actual `_read` + `_check_negcontrol` calls the push gate makes — **78 of the 136 trip
+it, 58 are clean, 0 are silently exempt.** Observed, not predicted; the distinction matters
+because `_read` returning `None` skips a file entirely, so a regex count would have scored
+unreadable files as violations.
+
+Its error string is scoped to tests as well: it says `test-needs-negcontrol: <file> has only
+positive assertions`. Widen the guard alone and a gate author is told their *test* needs work,
+naming a file that is not a test — correct about the file, wrong about the category, delivered
+mid-push when they are least inclined to argue.
 
 So the honest shape is not "an undisciplined codebase." It is a mechanized, enforced law pointed
 at everything except the population it most needs to govern — and the file containing it is itself
-invisible to `gate_*.py`, because it is named `doctrine_push_gate.py`. The enforcement and the
-blind spot are the same naming accident.
+invisible to `gate_*.py`, because it is named `doctrine_push_gate.py`. **The guard, the filename,
+and the error message all carry the same population assumption.** The enforcement and the blind
+spot are one naming accident, repeated three times.
 
 Every wrong number on this page tonight — five of them — came from a **correctly executed
 measurement over a wrongly drawn set.** Not one came from arithmetic. That is why every row ships

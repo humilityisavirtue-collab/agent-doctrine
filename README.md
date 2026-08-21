@@ -99,7 +99,7 @@ beside each number, so a re-run settles the claim instead of forking it:**
 
 | measured | count | predicate |
 |---|---|---|
-| verification gates | **136** | `ls cell/verify/gate_*.py` — **146 repo-wide**, 10 live outside that tree |
+| files matching `gate_*.py` | **136** | `ls cell/verify/gate_*.py` — **146 repo-wide**; and `*gate*.py` in the same directory returns **156**, so 20 gate-shaped files do not match the prefix |
 | …naming a negative control | **27** | regex `neg(ative)?[ _-]?control`, case-insensitive |
 | …carrying a named mutant table | **24** | literal token `MUTANTS` |
 | …carrying **both** | **5** | both of the above |
@@ -126,14 +126,19 @@ times across 8 gates**, in assertion labels:
 check("NEGCONTROL: healthy beating daemon is NOT restarted", ...)
 ```
 
-So the honest statement is narrower than "it lives in prose": **there is a naming convention and
-no construct.** 8 gates spell it identically and are exactly countable; the other 19 of the 27 say
-it in English, differently each time. Nothing enforces either.
+So within `gate_*.py` there is **a naming convention and no construct**: 8 files spell it
+identically and are exactly countable, the other 19 of the 27 say it in English differently each
+time, and nothing enforces either.
 
-That distinction decides the fix. Not "invent a `negative_control()` helper and get 136 gates to
-adopt it" — instead **promote the label 8 gates already use** into a helper that emits a
-machine-countable marker while its call sites still read `NEGCONTROL: <what must not happen>`.
-An adoption with 8 worked examples, not a greenfield.
+**Widen the glob by one character and even that is too strong.** `doctrine_push_gate.py` — a gate
+whose name does not start with `gate_`, so every count above is blind to it — contains
+`def _check_negcontrol(text, p)`. The construct exists. It was invisible because the population
+was defined by a filename prefix rather than by what the files do.
+
+That is the fourth time in one evening a claim here was true of the population measured and false
+of the category named, and it is the reason every row above ships its predicate. **A number is
+only as honest as the noun attached to it.** The counts are real; read them as "files matching
+this glob," never as "all gates."
 
 That paragraph originally read "143 of them carrying negative controls" — a number larger than
 the population it claimed to be a subset of, produced by silently swapping two different

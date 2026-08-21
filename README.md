@@ -100,7 +100,7 @@ beside each number, so a re-run settles the claim instead of forking it:**
 | measured | count | predicate |
 |---|---|---|
 | files matching `gate_*.py` | **136** | `ls cell/verify/gate_*.py` — **146 repo-wide**; and `*gate*.py` in the same directory returns **156**, so 20 gate-shaped files do not match the prefix |
-| …naming a negative control | **27** | regex `neg(ative)?[ _-]?control`, case-insensitive |
+| …carrying a negative control | **58** | `_NEGCONTROL` imported from `cell/verify/doctrine_push_gate.py` — **the predicate the push gate actually enforces**, not one written for counting |
 | …carrying a named mutant table | **24** | literal token `MUTANTS` |
 | …carrying **both** | **5** | both of the above |
 | role cards / laws / falsifier clauses | 12 / 36 / 45 | `^### ` and `falsifier` in `cell/doctrine/*.md` |
@@ -126,19 +126,37 @@ times across 8 gates**, in assertion labels:
 check("NEGCONTROL: healthy beating daemon is NOT restarted", ...)
 ```
 
-So within `gate_*.py` there is **a naming convention and no construct**: 8 files spell it
-identically and are exactly countable, the other 19 of the 27 say it in English differently each
-time, and nothing enforces either.
+**The negative-control row is worth the whole table**, because getting it right took five wrong
+answers and the last one is the interesting part.
 
-**Widen the glob by one character and even that is too strong.** `doctrine_push_gate.py` — a gate
-whose name does not start with `gate_`, so every count above is blind to it — contains
-`def _check_negcontrol(text, p)`. The construct exists. It was invisible because the population
-was defined by a filename prefix rather than by what the files do.
+A regex written for counting (`neg(ative)?[ _-]?control`) returns **27**. The predicate the
+project actually *enforces* returns **58** — a 2.15× understatement, because most gates express a
+negative control as `assert not`, `pytest.raises`, `must reject`, or a `decoy`, not by writing the
+phrase. **Publishing a number against a definition invented for measuring, when a governing
+definition already exists, understates your own discipline and cannot be checked against
+anything.** Cite the one with teeth.
 
-That is the fourth time in one evening a claim here was true of the population measured and false
-of the category named, and it is the reason every row above ships its predicate. **A number is
-only as honest as the noun attached to it.** The counts are real; read them as "files matching
-this glob," never as "all gates."
+And the reason nobody noticed: the law is not unmechanized. `doctrine_push_gate.py:130` holds
+`def _check_negcontrol(...)`, which refuses a push when a file has only positive assertions and
+returns an error that *teaches* — "author a green that can be red." It is real, it is enforced,
+and at line 174 it reads:
+
+```python
+if p.name.startswith("test_"):
+    nc = _check_negcontrol(text, p)
+```
+
+**Scoped to `test_*`. It has never once run on a gate.** 78 of the 136 would trip it today.
+
+So the honest shape is not "an undisciplined codebase." It is a mechanized, enforced law pointed
+at everything except the population it most needs to govern — and the file containing it is itself
+invisible to `gate_*.py`, because it is named `doctrine_push_gate.py`. The enforcement and the
+blind spot are the same naming accident.
+
+Every wrong number on this page tonight — five of them — came from a **correctly executed
+measurement over a wrongly drawn set.** Not one came from arithmetic. That is why every row ships
+its predicate, and why the noun matters more than the count: read these as "files matching this
+glob," never as "all gates."
 
 That paragraph originally read "143 of them carrying negative controls" — a number larger than
 the population it claimed to be a subset of, produced by silently swapping two different

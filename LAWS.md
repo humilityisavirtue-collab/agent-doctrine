@@ -174,6 +174,23 @@ like a verified one, so the guess is never challenged.
   Wrong-but-plausible is strictly worse than blank — it reads as verified provenance and stops the
   receiver from asking.
 
+### 20. Resolve identity through the authoritative index — never through resemblance.
+A snapshot identifier is not a subject. A size, a name shape, a plausible match is a *guess*
+about which artifact you are holding; the manifest, the index, the hash chain — whatever the
+system's own authoritative mapping is — is the only thing that *knows*. Identifying an artifact
+by resemblance can produce a fully correct inspection of the wrong subject.
+- **Tell:** you are inferring *which artifact* something is from a property it shares with other
+  artifacts (size, tag, filename shape) instead of resolving the identifier through the system's
+  own mapping.
+- **Prevents:** a published misattribution (2026-09-10). A model tag's identity was guessed from
+  blob size, the wrong blob's header was read, and "this model is mislabeled" was written to the
+  audit log — for a model that was genuine. The manifest-resolved audit proved the guess wrong
+  within the hour; the retraction cost more than the resolution would have.
+- **Falsifier:** a fleet where every artifact's identifier is globally unique and the mapping
+  cannot collide — then resemblance and resolution always agree, and the law buys nothing.
+- **Retire-when:** an identity store that resolves every reference to its subject atomically,
+  and every seat actually uses it before asserting anything about the subject.
+
 ---
 
 ## The frame

@@ -9,7 +9,8 @@ a hallucination and it is not incompetence — the agent read the code, reasoned
 reported honestly on a check that could never have failed in the first place.
 
 This repository is the doctrine a working 8-agent system uses to make that harder. It is not a
-framework and there is nothing to install. It is the set of rules the agents are held to, in
+framework — the laws are plain markdown, and so are the optional Claude Code skills that put them
+to work. It is the set of rules the agents are held to, in
 the format that makes rules survive contact with a smart system that wants to agree with itself.
 
 ---
@@ -38,6 +39,34 @@ gate_real
 
 Then `python vacuous_gate.py --mutants` proves the vacuity checker itself has teeth, because a
 checker that never catches anything is the same defect one layer up.
+
+---
+
+## Use it today: six Claude Code skills
+
+The laws are the *why*. These are the *how* — each one a single `SKILL.md` that turns a law
+into a habit your agent actually runs.
+
+| Skill | Use it when | What it forces |
+|---|---|---|
+| [`/gate`](skills/gate/SKILL.md) | before anyone writes "X works" | Run it for real; check the negative control could actually fail; verdict GREEN / RED / **AMBER** (green, but the check is weak) with evidence attached |
+| [`/verify-battery`](skills/verify-battery/SKILL.md) | certifying a rewrite, quantization, port, or grader as "correct" | Measure how far a *faithful* version deviates **and** how far *known-broken* versions do. The threshold lives in the gap — or doesn't exist |
+| [`/preregister`](skills/preregister/SKILL.md) | before spending GPU / paid compute | Write down what would prove you wrong *first*: blocking gates, significance **and** effect-size floors, controls that destroy only meaning, a stop rule |
+| [`/turn`](skills/turn/SKILL.md) | any multi-step task where confident-and-wrong is expensive | READ → BUILD → RUN → REPORT, and each phase hands the next an **artifact**, never a claim |
+| [`/malp`](skills/malp/SKILL.md) | before anything destructive or hard to reverse | Map · Altitude · Learn · Plan. GO/NO-GO plus the instrument that would prove you wrong. **Blind = no-go.** Doesn't act |
+| [`/lean`](skills/lean/SKILL.md) | before spawning subagents | Agent cost is mostly *requests per agent*, not agent count — measured across 109 transcripts, and corrected twice in the file |
+
+```bash
+cp -r skills/* ~/.claude/skills/          # every project
+cp -r skills/* your-project/.claude/skills/   # or just one
+```
+
+Then `/gate path/to/file.py`, `/malp "drop the old table"`, and so on — or let Claude Code pick a
+skill up on its own when the task matches its description.
+
+The number that shaped `/turn`, from 9 consecutive defects: an agent re-reading its own
+**summary** caught **0 of 9**; re-reading its own **raw rows** caught **2 of 2**. "Review your work"
+fails when the work it reviews is its description of the work.
 
 ---
 
@@ -185,7 +214,8 @@ them to "author" and "reviewer" and nothing changes.
 
 ## What this is not
 
-- **Not a framework.** Nothing to install, no runtime, no dependency on our stack.
+- **Not a framework.** No runtime, no dependency on our stack. The optional `skills/` are plain
+  markdown files you copy into Claude Code.
 - **Not benchmarked.** We have not run a controlled study showing these laws improve agent
   reliability by X%. They are field-tested, not measured, and saying otherwise would break
   the first law in the file.
